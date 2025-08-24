@@ -35,7 +35,7 @@ async def github_deploy(owner, repo, event_message):
     if query_response_code  == 204:
         return "Please check github actions for the status of the deployment"
     else:
-        return "Unable to fetch data from API."
+        return query_answer.text
 
 if __name__ == "__main__":
     # Initialize and run the server
