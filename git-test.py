@@ -5,8 +5,8 @@ import os
 import requests
 import json
 from langchain.chat_models import init_chat_model
-from typing import Optional
-from typing_extensions import Annotated, TypedDict
+#from typing import Optional
+#from typing_extensions import Annotated, TypedDict
 
 if not os.environ.get("GIT_PAT_AI"):
   os.environ["GIT_PAT_AI"] = getpass.getpass("Enter API key for Github: ")
@@ -37,7 +37,7 @@ else:
 
 model = init_chat_model("claude-3-5-sonnet-latest", model_provider="anthropic")
 
-json_schema = {
+dockerfiles_json_schema = {
     "title": "dockerfile",
     "description": "Format of dockerfile links",
     "type": "object",
@@ -54,7 +54,7 @@ json_schema = {
     "required": ["textresponse", "fileurl"],
 }
 
-structured_model = model.with_structured_output(json_schema)
+structured_model = model.with_structured_output(dockerfiles_json_schema)
 print("Initializing model...")
 try:
   response = structured_model.invoke(f'find dockerfiles in array {query_answer.text} return only value download_url')
