@@ -63,7 +63,26 @@ docker_response = dockerfile.text
 first_line = docker_response.split('\n', 1)[0]
 print("Original: " + first_line)
 
+dockerfile_json_schema = {
+    "title": "dockerfile",
+    "description": "the dockerfile",
+    "type": "object",
+    "properties": {
+        "textresponse": {
+            "type": "string",
+            "description": "The text response portion",
+        },
+        "dockerfile": {
+            "type": "string",
+            "description": "the dockerfile",
+        },
+    },
+    "required": ["textresponse", "dockerfile"],
+}
 print("Sending entire dockerfile to LLM to determine latest baseimage...")
-response = model.invoke(f'Update the FROM command to be the latest baseimage version for {dockerfile.text}, return the updated dockerfile')
-print(response.content)
+#response = model.invoke(f'Update the FROM command to be the latest baseimage version for {dockerfile.text}, return the updated dockerfile')
+dockerfile_structured_model = model.with_structured_output(dockerfile_json_schema)
+response = dockerfile_structured_model.invoke(f'Update the FROM command to be the latest baseimage version for {dockerfile.text}, return the updated dockerfile')
+print("===========")
+print(response["dockerfile"])
 
