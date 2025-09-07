@@ -173,11 +173,11 @@ print("Sending entire dockerfile to LLM to determine latest baseimage...")
 dockerfile_structured_model = model.with_structured_output(dockerfile_json_schema)
 #response = dockerfile_structured_model.invoke(f'Update the FROM command to be the latest baseimage version for {dockerfile.text}, return the updated dockerfile')
 response = dockerfile_structured_model.invoke(f'Update the FROM command to be the latest baseimage version for {dockerfile.text}, return the updated dockerfile make no changes if the baseimage is already at the latest version')
-print("===========")
-print(response["dockerfile"])
+#print("===========")
+#print(response["dockerfile"])
 
 
-exit(1)
+#exit(1)
 
 
 # File details
@@ -185,9 +185,9 @@ file_path = "Dockerfile"
 file_content = response["dockerfile"]
 #file_content = """Hello, World!
 #This is a test file created via GitHub API.
-#Current timestamp: """ + str(requests.get("http://worldtimeapi.org/api/timezone/UTC").json().get("datetime", "unknown"))
+#Current timestamp: """ + str(requests.get("http://worldtimeapi.org/api/timezone/Australia/Melbourne").json().get("datetime", "unknown"))
 
-commit_message = "Add example file via API"
+commit_message = "Updated Dockerfile FROM via AI"
 branch = "main"  # or "master" depending on your default branch
 
 try:
