@@ -177,37 +177,42 @@ response = dockerfile_structured_model.invoke(f'Update the FROM command to be th
 #print(response["dockerfile"])
 
 
-#exit(1)
+llm_docker_response = response["dockerfile"]
+llm_first_line = llm_docker_response.split('\n', 1)[0]
+print("Replacement: " + llm_first_line)
 
-
-# File details
-file_path = "Dockerfile"
-file_content = response["dockerfile"]
-#file_content = """Hello, World!
-#This is a test file created via GitHub API.
-#Current timestamp: """ + str(requests.get("http://worldtimeapi.org/api/timezone/Australia/Melbourne").json().get("datetime", "unknown"))
-
-commit_message = "Updated Dockerfile FROM via AI"
-branch = "main"  # or "master" depending on your default branch
-
-try:
-    # Create committer instance
-    committer = GitHubCommitter(GITHUB_TOKEN, OWNER, REPO)
-
-    # Commit the file
-    print(f"Committing file '{file_path}' to {OWNER}/{REPO}...")
-    result = committer.commit_file(
-        file_path=file_path,
-        content=file_content,
-        commit_message=commit_message,
-        branch=branch
-    )
-
-    print("✅ Success!")
-    print(f"Commit SHA: {result['commit']['sha']}")
-    print(f"File URL: {result['content']['html_url']}")
-except requests.exceptions.HTTPError as e:
-    print(f"❌ HTTP Error: {e}")
-    print(f"Response: {e.response.text}")
-except Exception as e:
-    print(f"❌ Error: {e}")
+if (llm_first_line == first_line):
+  print("Original and replacement are the same..... doing nothing")
+  exit(1)
+else:
+  # File details
+  file_path = "Dockerfile"
+  file_content = response["dockerfile"]
+  #file_content = """Hello, World!
+  #This is a test file created via GitHub API.
+  #Current timestamp: """ + str(requests.get("http://worldtimeapi.org/api/timezone/Australia/Melbourne").json().get("datetime", "unknown"))
+  
+  commit_message = "Updated Dockerfile FROM via AI"
+  branch = "main"  # or "master" depending on your default branch
+  
+  try:
+      # Create committer instance
+      committer = GitHubCommitter(GITHUB_TOKEN, OWNER, REPO)
+  
+      # Commit the file
+      print(f"Committing file '{file_path}' to {OWNER}/{REPO}...")
+      result = committer.commit_file(
+          file_path=file_path,
+          content=file_content,
+          commit_message=commit_message,
+          branch=branch
+      )
+  
+      print("✅ Success!")
+      print(f"Commit SHA: {result['commit']['sha']}")
+      print(f"File URL: {result['content']['html_url']}")
+  except requests.exceptions.HTTPError as e:
+      print(f"❌ HTTP Error: {e}")
+      print(f"Response: {e.response.text}")
+  except Exception as e:
+      print(f"❌ Error: {e}")
