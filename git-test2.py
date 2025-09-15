@@ -33,7 +33,7 @@ import requests
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, field_validator
 from langchain.chat_models import init_chat_model
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -78,13 +78,13 @@ class DockerfileUpdateRequest(BaseModel):
     commit_message: Optional[str] = "Updated Dockerfile FROM via AI"
     dry_run: bool = False
     
-    @validator('owner', 'repo')
+    @field_validator('owner', 'repo')
     def validate_not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('Field cannot be empty')
         return v.strip()
     
-    @validator('github_token')
+    @field_validator('github_token')
     def validate_github_token(cls, v):
         if not v or len(v) < 10:
             raise ValueError('Invalid GitHub token')
@@ -136,7 +136,7 @@ class HTTPClient:
         retry_strategy = Retry(
             total=max_retries,
             status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS", "PUT"],
+            allowed_methods=["HEAD", "GET", "OPTIONS", "PUT"],
             backoff_factor=1
         )
         
