@@ -112,9 +112,9 @@ query_response_code = query_answer.status_code
 if query_response_code  == 204:
   print("Please check github actions for the status of the deployment")
 else:
-#  print(query_answer.text)
   print("Contacting git....")
   print("Got response...")
+ # print(query_answer.text)
 
 
 model = init_chat_model("claude-opus-4-1-20250805", model_provider="anthropic")
@@ -147,7 +147,7 @@ except Exception as e:
 print("Found dockerfile...")
 #print(response)
 
-print("Pulling dockerfile from git....")
+print(f"Pulling dockerfile {response["fileurl"]} from git....")
 dockerfile = requests.get(response["fileurl"])
 docker_response = dockerfile.text
 first_line = docker_response.split('\n', 1)[0]
